@@ -1,0 +1,26 @@
+{
+  "name": "lolhistoryclone",
+  "version": "1.0.0",
+  "description": "lol history search system clone",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Younggil-kim/LoLHistoryClone.git"
+  },
+  "author": "Younggil",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Younggil-kim/LoLHistoryClone/issues"
+  },
+  "homepage": "https://github.com/Younggil-kim/LoLHistoryClone#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
