@@ -1,19 +1,43 @@
-// import { response } from 'express';
 import React, {useEffect, useState} from 'react'
-import { API_KEY, API_URL } from '../../Config';
+// import { API_KEY, API_URL } from '../../Config';
+import axios from 'axios';
+// import { response } from 'express';
+// import { response } from 'express';
 
-function LandingPage(){
-    const name = 'Agnes sengA';
-    useEffect(() => {
-        const endpoint = `${API_URL}/lol/summoner/v4/summoners/by-name/${name}?api_key=${API_KEY}`;
+function LandingPage(props){
 
-        fetch(endpoint)
-        .then(response => response.json())
-        .then(response => console.log(response))
-    }, [])
-    return (
+    const [summoner, setsummoner] = useState("")
+
+    // function searchSummoner(dataTosubmit){
+    //     const request = axios.post('/api/users/')
+    // }
+
+    const onSummonerHandler = (event) => {
+        setsummoner(event.currentTarget.value)
+
+    }
+
+    const onSubmitHandler = (event) => {
+        event.preventDefault();
+        let body = {
+            name : summoner
+        }
+        const request = axios.post('/api/LandingPage', body)
+        .then (response => console.log(response.data))
+        console.log(request)
+    }
+
+
+    return(
         <div>
-            안녕하세요
+            <form style={{display:'flex', flexDirection: 'column'}}
+                onSubmit = {onSubmitHandler}
+            > 
+            <input type = 'summoner' value = {summoner} onChange={onSummonerHandler}/>
+            <button type="submit">
+                검색
+            </button>
+            </form>
         </div>
     )
 }
