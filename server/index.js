@@ -9,11 +9,19 @@ app.use(bodyParser.urlencoded({extended: true}));
 // const {API_KEY} = require('./Config');
 
 
+app.get('/', (req, res) => {
+    res.send('서버 생성')
+})
+
+app.get('/api/hello', (req, res) => {
+    res.send('안녕하세요')
+})
+
 app.post('/api/LandingPage', async (req, res) =>{
     const name = req.body.name;
-    console.log(req.body.name)
-    const { data } = await axios.get(`https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/${name}?api_key=RGAPI-1483410c-8744-49f1-a761-4c286c5c2fc7`);
-    console.log(data)
+    name = encodeURI(name)
+    const { data } = await axios.get(`https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/${name}?api_key=RGAPI-b98ae4bd-5078-4fdf-8b18-4acb62bba12e`);
+    // console.log(data)
     res.send(data)
     // return res.json({
     //     searchSuccess: true,
@@ -27,6 +35,3 @@ app.listen(port, () => {
     console.log("대기중입니다.")
 })
 
-// app.get('/api/hello', (req, res) => {
-//     res.send('안녕하세요')
-// })
