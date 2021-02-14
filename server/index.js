@@ -6,7 +6,7 @@ const request = require('request');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const API_URI = 'https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/';
-const API_KEY = 'RGAPI-1483410c-8744-49f1-a761-4c286c5c2fc7';
+const API_KEY = 'RGAPI-b98ae4bd-5078-4fdf-8b18-4acb62bba12e';
 const name = 'hide on bush'
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json())
@@ -19,7 +19,8 @@ app.get('/api/hello', (req, res) => {
 })
 
 app.post('/api/LandingPage', async (req, res) =>{
-    const name = req.body.name;
+    var name = req.body.name;
+    name = encodeURI(name)
     console.log(req.body.name)
     const { data } = await axios.get(`https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/${name}?api_key=${API_KEY}`);
     console.log(data)

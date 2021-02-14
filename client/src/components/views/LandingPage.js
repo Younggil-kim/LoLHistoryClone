@@ -20,8 +20,9 @@ function LandingPage(props){
         
         console.log("검색하신 소환사 명은 ",body)
         const request = axios.post('/api/LandingPage', body)
-            .then(response => response.data)
-        console.log(request)
+            .then(response => console.log(response.data))
+        props.history.push("/summoner")
+        
         //dispatch(searchSummoner(body))
             
     }
