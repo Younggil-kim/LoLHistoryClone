@@ -7,7 +7,6 @@ function LandingPage(props){
     // const dispatch = useDispatch();
 
     const [summonerName, setsummonerName] = useState("")
- 
     const onSummonerHandler = (event) => {
         setsummonerName(event.currentTarget.value)
     }
@@ -19,9 +18,16 @@ function LandingPage(props){
         }
         
         console.log("검색하신 소환사 명은 ",body)
-        const request = axios.post('/api/LandingPage', body)
-            .then(response => console.log(response.data))
-        props.history.push("/summoner")
+        axios.post('/api/LandingPage', body)
+            .then(response => {
+                if(response.data.searchSuccess){
+                    console.log(response.data)
+                    props.history.push(`/summoner?name=${body.name}`)
+                    
+                } else{
+                    alert(`${response.data.message}`)
+                }
+            })
         
         //dispatch(searchSummoner(body))
             
