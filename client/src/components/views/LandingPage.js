@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 // import { API_KEY, API_URL } from '../../Config';
 import axios from 'axios';
-import { response } from 'express';
+import SummonerPage from './SummonerPage';
 
 function LandingPage(props){
 
@@ -22,8 +22,16 @@ function LandingPage(props){
             name : summoner
         }
         const request = axios.post('/api/LandingPage', body)
-        .then (response => console.log(response.data))
-        props.history.push('/summoner')
+        .then(response => {
+            console.log(response.data)
+            if (response.data.searchSuccess){
+                props.history.push('/summoner?userName='+response.data.data.name)
+                    
+            }else{
+                alert('소환사명을 찾을 수 없습니다.')
+            }
+        })
+        // .then (response => console.log(response.data.searchSuccess))
         // console.log(request)
     }
 
