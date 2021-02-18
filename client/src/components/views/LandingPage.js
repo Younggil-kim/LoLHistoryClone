@@ -16,25 +16,16 @@ function LandingPage(props){
         let body = {
             name : summonerName
         }
-        
-        console.log("검색하신 소환사 명은 ",body)
-        axios.post('/api/LandingPage', body)
-            .then(response => {
-                if(response.data.searchSuccess){
-                    console.log(response.data)
-                    props.history.push(`/summoner?name=${body.name}`)
-                    
-                } else{
-                    alert(`${response.data.message}`)
-                }
-            })
+        props.history.push(`/summoner?name=${body.name}`)
+
+
         
         //dispatch(searchSummoner(body))
             
     }
     return (
         <div>
-            <form style= {{ display: 'flex', flexDirection:'column'}}
+            <form style= {{ display: 'flex', flexDirection:'column', width: '100%', height: '100vh', alignItems: 'center'}}
                 onSubmit={onSubmitHandler}
             >
                 <input type="text" value={summonerName} onChange= {onSummonerHandler}>
