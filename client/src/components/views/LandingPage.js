@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 // import { API_KEY, API_URL } from '../../Config';
 import axios from 'axios';
-import SummonerPage from './SummonerPage';
 
 function LandingPage(props){
 
@@ -23,7 +22,6 @@ function LandingPage(props){
         }
         const request = axios.post('/api/LandingPage', body)
         .then(response => {
-            console.log(response.data)
             if (response.data.searchSuccess){
                 props.history.push('/summoner?userName='+response.data.data.name)
                     
