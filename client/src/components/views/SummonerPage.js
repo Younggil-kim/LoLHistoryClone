@@ -8,6 +8,9 @@ const SummonerPage = ({location, match}) => {
     const [summonerLevel, setsummonerLevel] = useState("")
     const [accountId, setaccountId] = useState("")
     const [summonerId, setsummonerId] = useState("")
+    const [profileIconId, setprofileIconId] = useState("")
+    const [imgUrl, setimgUrl] = useState("")
+
     const [soloTier, setsolotier] = useState("")
     const [soloLeaguePoint, setsololeaguePoint] = useState("")
     const [soloRank, setsoloRank] = useState("")
@@ -22,6 +25,8 @@ const SummonerPage = ({location, match}) => {
 
     const [soloTotal, setsoloTotal] = useState(0)
     const [flexTotal, setflexTotal] = useState(0)
+
+
     // console.log("검색하신 소환사 명은 ",query)
     // 받아와야할게 matchid => 이거로 최근 20개 전적을 뽑아와서, 뽑아낸 matchid로 그 게임 상세 정보를 가져오기
     // 
@@ -40,6 +45,8 @@ const SummonerPage = ({location, match}) => {
         setsummonerLevel(data.searchData.summonerLevel)
         setaccountId(data.searchData.accountId)
         setsummonerId(data.searchData.id)
+        setprofileIconId(data.searchData.profileIconId)
+        setimgUrl(`http://ddragon.leagueoflegends.com/cdn/6.3.1/img/profileicon/${profileIconId}.png`)
         let id = {
             summonerId : data.searchData.id
         }
@@ -115,6 +122,7 @@ const SummonerPage = ({location, match}) => {
         <div>
             <h2>{query.name}</h2>
             님의 소환사페이지입니다.
+            <img src={imgUrl}></img>
             <br></br>
             소환사님의 레벨은 {summonerLevel && <span>{summonerLevel} 입니다.</span>}
             <br></br>
