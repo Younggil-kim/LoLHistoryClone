@@ -1,48 +1,40 @@
-import React, {useEffect, useState} from 'react'
-// import { API_KEY, API_URL } from '../../Config';
+import React, {useState} from 'react'
 import axios from 'axios';
-
+// import {searchSummoner} from '../../_actions/user_action'
+// import {useDispatch} from 'react-redux'
+// import {withRouter} from 'react-router-dom';
 function LandingPage(props){
+    // const dispatch = useDispatch();
 
-    const [summoner, setsummoner] = useState("")
-
-    // function searchSummoner(dataTosubmit){
-    //     const request = axios.post('/api/users/')
-    // }
-
+    const [summonerName, setsummonerName] = useState("")
     const onSummonerHandler = (event) => {
-        setsummoner(event.currentTarget.value)
-
+        setsummonerName(event.currentTarget.value)
     }
-
     const onSubmitHandler = (event) => {
         event.preventDefault();
         let body = {
-            name : summoner
+            name : summonerName
         }
-        const request = axios.post('/api/LandingPage', body)
+        const request = axios.post('/api/LandingPage/summoner/v4', body)
         .then(response => {
             if (response.data.searchSuccess){
-                props.history.push('/summoner?userName='+response.data.data.name)
-                    
+                props.history.push(`/summoner?name=${body.name}`)
             }else{
                 alert('소환사명을 찾을 수 없습니다.')
             }
-        })
-        // .then (response => console.log(response.data.searchSuccess))
-        // console.log(request)
+        })  
     }
-
-
-    return(
+    return (
         <div>
-            <form style={{display:'flex', flexDirection: 'column'}}
-                onSubmit = {onSubmitHandler}
-            > 
-            <input type = 'summoner' value = {summoner} onChange={onSummonerHandler}/>
-            <button type="submit">
-                검색
-            </button>
+            <form style= {{ display: 'flex', flexDirection:'column', width: '100%', height: '100vh', alignItems: 'center'}}
+                onSubmit={onSubmitHandler}
+            >
+                <input type="text" value={summonerName} onChange= {onSummonerHandler}>
+                    
+                </input>
+                <button type="submit">
+                    GO!
+                </button>
             </form>
         </div>
     )
