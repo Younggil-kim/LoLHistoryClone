@@ -15,7 +15,8 @@ const SummonerPage = ({location, match}) => {
     })
     const [league, setleague] = useState([])
     const [soloRank, setsoloRank] = useState({rank : "", leaguePoints : 0, tier : ""})
-    const [flexRank, setflexRank] = useState([])
+    const [flexRank, setflexRank] = useState({rank : "", leaguePoints : 0, tier : ""})
+    const [history, sethistory] = useState({matchHst : []})
 
     function setState (data) {
         setSummoner(Summoner => ({...Summoner, 
@@ -60,17 +61,61 @@ const SummonerPage = ({location, match}) => {
                 }
             })
             leagueV4.then((data) => {
-                console.log("a",data)
+                console.log("a",data.searchData)
                 setleague([...league, data.searchData])
-                if (data.searchData[0].queueType === "RANKED_SOLO_5x5"){
-                    setsoloRank({...soloRank, rank : data.searchData[0].rank, 
-                        leaguePoints : data.searchData[0].leaguePoints,
-                         tier : data.searchData[0].tier})
+                if (data.searchData.length === 1){
+                    if (data.searchData[0].queueType === "RANKED_SOLO_5x5"){
+                        setsoloRank({...soloRank, 
+                            rank : data.searchData[0].rank, 
+                            leaguePoints : data.searchData[0].leaguePoints,
+                            tier : data.searchData[0].tier})
+                    }
+                    else if (data.searchData[0].queueType === "RANKED_FLEX_SR"){
+                        setflexRank({...flexRank, 
+                            rank: data.searchData[0].rank,
+                            leaguePoints : data.searchData[0].leaguePoints,
+                            tier : data.searchData[0].tier})
+                    }
+                }else {
+                    if (data.searchData[1].queueType === "RANKED_SOLO_5x5"){
+                        setsoloRank({...soloRank, 
+                            rank : data.searchData[1].rank, 
+                            leaguePoints : data.searchData[1].leaguePoints,
+                            tier : data.searchData[1].tier})
+                    }
+                    else if (data.searchData[1].queueType === "RANKED_FLEX_SR"){
+                        setflexRank({...flexRank, 
+                            rank: data.searchData[1].rank,
+                            leaguePoints : data.searchData[1].leaguePoints,
+                            tier : data.searchData[1].tier})
+                    }
                 }
             })
     }
     }, [Summoner])
+
+    useEffect(() => {
+        if (Summoner.summonerLevel){
+            let accountId = {
+                accountId : Summoner.accountId
+            }
+            const matchList = new Promise((resolve, reject) => {
+                try{
+                    const request = axios.post("/api/LandingPage/matchList", accountId)
+                        .then(response => {return response.data})
+                    resolve(request)
+                } catch(err){
+                    reject(new Error(err))
+                }
+            })
+            matchList.then((data) => {
+                sethistory({...history, matchHst : JSON.parse(JSON.stringify(data.searchData.matches))})
+            })
+    }
+    }, [Summoner])
+ 
     console.log("랜더링 되었어요")
+    console.log(history.matchHst)
     return (
         <div>
             <h2>{query.name} 님의 소환사페이지입니다. </h2>
@@ -78,6 +123,10 @@ const SummonerPage = ({location, match}) => {
             {(Summoner.summonerLevel != 0) && <span>소환사님의 레벨은 {Summoner.summonerLevel} 입니다.</span>}
             <br></br>
             {(league.length != 0)&& <span>소환사님의 솔로 랭크 점수는 {soloRank.tier} {soloRank.rank} {soloRank.leaguePoints}점 입니다.</span>}
+            <br></br>
+            {(league.length != 0)&& <span>소환사님의 자유 랭크 점수는 {flexRank.tier} {flexRank.rank} {flexRank.leaguePoints}점 입니다.</span>}
+            <br></br>
+            {(history.matchHst.length != 0) && <span>{history.matchHst[0].champion}</span>}
             {/* <br></br>
 
             소환사님의 솔로 랭크 티어는 {soloTier && <span>{soloTier}  {soloRank} {soloLeaguePoints} 입니다. {soloAll}전 {soloWins}승 {soloLoses}패 ({(soloWins/soloAll*100).toFixed(2)}%) </span>}

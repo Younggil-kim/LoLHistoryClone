@@ -6,8 +6,7 @@ const request = require('request');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const API_URI = 'https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/';
-const API_KEY = 'RGAPI-d036f888-065f-48e5-a269-ccc02ff5938a';
-const name = 'hide on bush'
+const API_KEY = 'RGAPI-23d108b8-7ee9-49cf-8603-2485436585de';
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json())
 app.get('/', (req, res) => {
@@ -48,7 +47,22 @@ app.post('/api/LandingPage/league/v4', async(req, res) => {
         })
     }
 })
-
+app.post('/api/LandingPage/matchList', async(req, res) => {
+    accountId = req.body.accountId
+    console.log(accountId)
+    try{
+        const { data } = await axios.get(`https://kr.api.riotgames.com/lol/match/v4/matchlists/by-account/${accountId}?api_key=${API_KEY}`);
+        return res.json({
+            searchSuccess: true,
+            searchData: data
+        })
+    } catch (error){
+        return res.json({
+            searchSuccess: false,
+            message: "매치 리스트를 찾을 수 없습니다."
+        })
+    }
+})
 
 
 
