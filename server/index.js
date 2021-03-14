@@ -6,7 +6,7 @@ const request = require('request');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const API_URI = 'https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/';
-const API_KEY = 'RGAPI-23d108b8-7ee9-49cf-8603-2485436585de';
+const API_KEY = 'RGAPI-ba881d5f-d155-4ad6-be69-63f6a284425b';
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json())
 app.get('/', (req, res) => {
@@ -63,6 +63,26 @@ app.post('/api/LandingPage/matchList', async(req, res) => {
         })
     }
 })
+
+app.post('/api/LandingPage/gameid', async(req, res) => {
+
+
+    matchId = req.body.gameId
+    console.log(accountId)
+    try{
+        const { data } = await axios.get(`https://kr.api.riotgames.com/lol/match/v4/matches/${matchId}?api_key=${API_KEY}`);
+        return res.json({
+            searchSuccess: true,
+            searchData: data
+        })
+    } catch (error){
+        return res.json({
+            searchSuccess: false,
+            message: "해당하는 게임을 찾을 수 없습니다."
+        })
+    }
+})
+
 
 
 

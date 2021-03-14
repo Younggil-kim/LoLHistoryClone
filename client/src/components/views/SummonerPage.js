@@ -114,8 +114,40 @@ const SummonerPage = ({location, match}) => {
     }
     }, [Summoner])
  
+    useEffect(() => {
+        if (history.matchHst.length != 0){
+            let gameId = {
+                gameId : history.matchHst[0].gameId
+            }
+        const gameInfo = new Promise((resolve, reject) => {
+            try{
+                const request = axios.post("/api/LandingPage/gameid", gameId)
+                    .then(response => {return response.data})
+                resolve(request)
+            } catch(err){
+                reject(new Error(err))
+            }
+        })
+        gameInfo.then((data) => {
+            setgame([...game, data.searchData.participants])
+        })
+    }
+    }, [history])
+    const [game, setgame] = useState([])
+
+
     console.log("랜더링 되었어요")
     console.log(history.matchHst)
+    console.log("game 정보는",game)
+    
+    console.log("0 정보는",typeof(game))
+    console.log("1 정보는",typeof(game[0]))
+    console.log("2 정보는",game[0])
+    const kills = game.map((obj) => Object.values(obj)[0].stats.kills);
+    const deaths =game.map((obj) => Object.values(obj)[0].stats.deaths);
+    const assists =game.map((obj) => Object.values(obj)[0].stats.assists);
+    console.log("결과값",kills, deaths, assists);
+    // console.log("첫 참가자 정보는",game[0])
     return (
         <div>
             <h2>{query.name} 님의 소환사페이지입니다. </h2>
@@ -126,7 +158,11 @@ const SummonerPage = ({location, match}) => {
             <br></br>
             {(league.length != 0)&& <span>소환사님의 자유 랭크 점수는 {flexRank.tier} {flexRank.rank} {flexRank.leaguePoints}점 입니다.</span>}
             <br></br>
-            {(history.matchHst.length != 0) && <span>{history.matchHst[0].champion}</span>}
+            {(history.matchHst.length != 0) && <span>사용한 챔피언 번호 :  {history.matchHst[0].champion}</span>}
+            <br></br>
+            {<span>최근 20 게임</span>}
+            <br></br>
+            {(game.length != 0) && <span>{kills}/{deaths}/{assists}</span>}
             {/* <br></br>
 
             소환사님의 솔로 랭크 티어는 {soloTier && <span>{soloTier}  {soloRank} {soloLeaguePoints} 입니다. {soloAll}전 {soloWins}승 {soloLoses}패 ({(soloWins/soloAll*100).toFixed(2)}%) </span>}
